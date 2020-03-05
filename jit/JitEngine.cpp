@@ -17,7 +17,6 @@ JitEngine::JitEngine(JITTargetMachineBuilder JTMB, DataLayout DL) :
     Mangle(ES, this->DL),
     Context(std::make_unique<LLVMContext>())
 {
-
     ObjectLayer.setNotifyLoaded(createNotifyLoadedFtor());
     auto R = createHostProcessResolver();
     ES.getMainJITDylib().setGenerator(std::move(R));
@@ -87,4 +86,10 @@ Expected<JITTargetAddress> JitEngine::getFunctionAddr(StringRef Name)
                                  "'%s' evaluated to nullptr", Name.data());
 
     return A;
+}
+
+llvm::Error JitEngine::defineAbsolute(llvm::StringRef Name, llvm::JITEvaluatedSymbol Sym) {
+    auto InternedName = ES.intern(Name);
+    SymbolMap Symbols({{InternedName, Sym}});
+    return ES.getMainJITDylib().define(absoluteSymbols(std::move(Symbols)));
 }

@@ -59,6 +59,9 @@ public:
     }
 
     const llvm::DataLayout & getDataLayout() const { return DL; }
+    const llvm::orc::MangleAndInterner & getMangle() const { return Mangle; }
+
+    llvm::Error defineAbsolute(llvm::StringRef Name, llvm::JITEvaluatedSymbol Sym);
 
     /// Constructor
     JitEngine(llvm::orc::JITTargetMachineBuilder JTMB, llvm::DataLayout DL);
