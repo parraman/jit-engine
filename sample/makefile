@@ -5,7 +5,7 @@ CXXFLAGS+= -I../jit
 LDFLAGS+=$(shell llvm-config-9 --ldflags)
 LIBS:=$(shell llvm-config-9 --libs)
 
-all: simple coro arrays
+all: simple coro arrays promise
 
 simple: simple.o JitEngine.o JitOptimizer.o
 	g++ $(CXXFLAGS) -o simple simple.o JitEngine.o JitOptimizer.o $(LDFLAGS) $(LIBS)
